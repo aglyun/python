@@ -1,0 +1,37 @@
+1.优化网站的访问：
+1.1 数据库（mysql,redis）的分布式：多主多从 读写分离 分表分库 （架构层级）
+1.2 前端的优化，
+1.2.1，域名地域的解析优化，类似于百度，
+1.2.2，域名运营商的解析优化，电信 联通 移动 。
+1.2.3，CDN静态分发优化
+1.2.4，自己服务器NGINX的负载均衡100万IP分开10台，理论一台只要承担10W（必须要在同一个机房的同个网段）IO读写能有效。
+1.3 后端的优化：
+uwsgi (反向代理)  能做到多个后台，服务器的负载均衡
+
+
+部署的流程
+1.把静态文件收集出来。
+2.项目文件打包（GIT）
+3.数据库导出来,
+4.虚拟环境包的列表冻结命令导出来，注意有一些包是要手动安装的。(离线的方式) xadmin,fdfs_client-py-master.zip
+5.前端部署（python3.5-3.7 mysql5.7.XX, nginx1.16-1.19,redis5.0-6.0）
+6.docker进行安装
+7.如用宝塔面板来部署项目就非常简单一些，
+
+
+[uwsgi]
+socket = 172.18.186.49:8006
+chdir = /www/wwwroot/pyprojects/mall/
+wsgi-file = mall/wsgi.py
+master = true
+processes = 1
+threads = 2
+pidfile=uwsgi.pid
+daemonize=uwsgi.log
+virtualenv=/www/wwwroot/pyprojects/mall/openmall_venv
+logto = /www/wwwroot/pyprojects/mall/logs/error.log
+chmod-socket = 660
+vacuum = true
+master = true
+max-requests = 1000
+
